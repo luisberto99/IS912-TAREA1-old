@@ -5,3 +5,23 @@ body {
     padding: 3rem 1.5rem;
     text-align: center;
 }
+
+.bg-dark{
+    background-color: black !important;
+}
+
+#btnSearch{
+    background-color: #FFB417;
+    color: black;
+}
+.navbar{
+    padding: 0.1rem 1rem;
+}
+
+.navbar form{
+    flex-flow: row nowrap;
+}
+
+.navbar form input{
+    margin-right: 0.5rem;
+}
