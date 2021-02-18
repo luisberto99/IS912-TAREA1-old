@@ -1,4 +1,4 @@
-
+//********** INDEXEDDB **********/
 const iDB = indexedDB;
 
 if(iDB){
@@ -7,9 +7,9 @@ if(iDB){
 
     request.onsuccess = (e) => {
         db = e.target.result;
-        //db = request.result;
         console.log('open',db);
         addData();
+        readData(0);
     }
 
     request.onupgradeneeded = (e) =>{
@@ -20,17 +20,32 @@ if(iDB){
         });
     }
 
+    request.onerror = (error) =>{
+        console.error("Error", error.result)
+    }
+
+
+    //¨**** FUNCION QUE AGREGA LOS DATOS *****
     const addData = () =>{
         const trans = db.transaction(['categorias'],'readwrite');
             const objectStore = trans.objectStore('categorias');
         for (let i = 0; i < 5; i++) {
             const request = objectStore.add(categorias[i]);   
         }
-        
     }
 
-    request.onerror = (error) =>{
-        console.error("Error", error.result)
+    //*****  FUNCION QUE LEE LOS DATOS *****/
+    const readData = (n) =>{
+        const trans = db.transaction(['categorias'],'readonly');
+            const objectStore = trans.objectStore('categorias');
+            const request = objectStore.get(`Categoria ${n}`);
+
+            request.onsuccess = (e) => {
+                let categoria = e.target.result;
+
+                console.log(categoria.nombreCategoria);
+            
+            }
     }
 
 }
