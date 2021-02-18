@@ -135,3 +135,57 @@ align-self: start;
   color: var(--color-yellow);
 }
 
+
+.modalCarousel{
+  padding: 1rem;
+}
+
+.modalCarousel img{
+  width: 100%;
+  border-top: 0;
+}
+
+.modalApp{
+  border-top: 1px solid #dee2e6;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+}
+
+.modalApp .img{
+  min-width: 30%;
+}
+
+.modalApp .img img{
+  width: 80%;
+}
+
+.modalAppTitle{
+  font-size: 1.6rem;
+}
+
+.modalAppDev{
+  font-size: .8rem;
+  color: #777;
+  letter-spacing: 0;
+}
+
+.modalAppInfo p{
+  margin: 0;
+}
+
+.modalAppPrice{
+  font-size: 1.1rem;
+}
+
+.modalStars{
+  border-top: 1px solid #dee2e6;
+  padding: 1rem;
+  text-align: center;
+  color: forestgreen;
+}
+
+.modalComments{
+  border-top: 1px solid #dee2e6;
+  padding: 1rem;
+}

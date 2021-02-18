@@ -2,7 +2,10 @@
 const iDB = indexedDB;
 
 
+
+
 if(iDB){
+    let aplicaciones;
     let db;
     const request = iDB.open("appstore",1);
 
@@ -77,7 +80,7 @@ if(iDB){
       aplicaciones.forEach(element => {
           document.getElementById("selectCategoria")
           document.getElementById("gridContainer").innerHTML += `
-          <div class="cardContainer item1">
+          <div class="cardContainer" id="app${element.codigo}" onclick="modal(${element.codigo})" data-toggle="modal" data-target="#Modal">
               <div class="card">
                   <img src="${element.icono}" alt="">
                   <div class="cardInfo">
@@ -102,5 +105,20 @@ if(iDB){
     selectCategoria.onchange = () =>{
         readData(selectCategoria.value);
     }
+
+    //**********  OBTIENE EL DETALLE DE UNA APP DE LA CATEGORIA **********/
+    function modal1(n){
+        aplicaciones.forEach(element => {
+            if (element.codigo == n) {
+                modalBody = document.getElementById("modal-body");
+                modalBody.innerHTML=`Nuevo modal App${n} `;
+            }
+        });
+        
+    }
+
+
+    
 }
+
 
