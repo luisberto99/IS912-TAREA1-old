@@ -41,11 +41,35 @@ if(iDB){
             const request = objectStore.get(`Categoria ${n}`);
 
             request.onsuccess = (e) => {
-                let categoria = e.target.result;
-
-                console.log(categoria.nombreCategoria);
-            
+               llenarGrild(e.target.result);
             }
+    }
+
+    const llenarGrild = (categoria) =>{
+      aplicaciones = categoria.aplicaciones;
+
+      aplicaciones.forEach(element => {
+          document.getElementById("gridContainer").innerHTML += `
+          <div class="cardContainer item1">
+              <div class="card">
+                  <img src="${element.icono}" alt="">
+                  <div class="cardInfo">
+                      <strong class="cardAppTitle">${element.nombre}</strong><br>
+                      <span class="cardAppDev">${element.desarrollador}</span><br>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <br>
+                      <strong>${element.precio}</strong>
+                  </div>
+              </div>
+          </div>
+          `;
+          
+      });
+
+
     }
 
 }

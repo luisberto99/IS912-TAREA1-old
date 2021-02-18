@@ -25,6 +25,7 @@ var categorias = [];
           let aplicacion = {
               codigo:contador,
               nombre:"App "+contador,
+              precio: `$${(Math.random()*10).toFixed(2)}`,
               descripcion:textosDePrueba[Math.floor(Math.random() * (5 - 1))],
               icono:`img/app-icons/${contador}.webp`,
               instalada:contador%3==0?true:false,

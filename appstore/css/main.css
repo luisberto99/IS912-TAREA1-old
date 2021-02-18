@@ -79,22 +79,22 @@ body {
  
 .gridContainer{
   display: grid;
-  grid-template-columns: auto auto;
-  grid-gap: 10px;
-  padding: 10px;
+  grid-template-columns: 50% 50%;
+  grid-gap: 1%;
+  padding: 1%;
 }
 
 
 
-@media(min-width: 786px){
+@media(min-width: 766px){
   .gridContainer{
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: 25% 25% 25% 25% ;
   }
 }
 
 @media(min-width: 992px){
   .gridContainer{
-    grid-template-columns: auto auto auto auto auto auto;
+    grid-template-columns: 16% 16% 16% 16% 16% 16%;
   }
 }
 .gridContainer .cardContainer{
