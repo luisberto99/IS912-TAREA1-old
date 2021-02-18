@@ -1,6 +1,7 @@
 //********** INDEXEDDB **********/
 const iDB = indexedDB;
 
+
 if(iDB){
     let db;
     const request = iDB.open("appstore",1);
@@ -8,8 +9,9 @@ if(iDB){
     request.onsuccess = (e) => {
         db = e.target.result;
         console.log('open',db);
-        addData();
-        readData(0);
+        addData(); //AGREGA LOS DATOS AL INDEXEDDB
+        redCategorias(); //LLENA EL SELECTCATEGORIAS
+        readData(0); //LLENA EL GRID DE APP CON LA CATEGORIA 0 (PRIMERA SELECCIONADA)
     }
 
     request.onupgradeneeded = (e) =>{
@@ -25,30 +27,55 @@ if(iDB){
     }
 
 
-    //¨**** FUNCION QUE AGREGA LOS DATOS *****
+    //¨**** FUNCION QUE AGREGA LOS DATOS AL INDEXEDDB *****
     const addData = () =>{
         const trans = db.transaction(['categorias'],'readwrite');
-            const objectStore = trans.objectStore('categorias');
+        const objectStore = trans.objectStore('categorias');
         for (let i = 0; i < 5; i++) {
             const request = objectStore.add(categorias[i]);   
         }
     }
-
-    //*****  FUNCION QUE LEE LOS DATOS *****/
-    const readData = (n) =>{
+    //*****  FUNCION QUE LEE LOS DATOS DEL INDEXEDDB *****/
+    const redCategorias = () => {
         const trans = db.transaction(['categorias'],'readonly');
-            const objectStore = trans.objectStore('categorias');
-            const request = objectStore.get(`Categoria ${n}`);
-
-            request.onsuccess = (e) => {
-               llenarGrild(e.target.result);
+        const objectStore = trans.objectStore('categorias');
+        const request =objectStore.openCursor();
+        
+        // LIMIPA EL SELECTCATEGORIA
+        document.getElementById("selectCategoria").innerHTML ="";
+        let cont = 0
+        // UTILIZA UN CURSOR QUE RECORRE LA INDEXEDDB PARA OBTENER EL NOMBRE DE LAS CATEGORIAS Y AGREGARLO AL SELECTCATEGORIA
+        request.onsuccess = (e) => {
+            cursor = e.target.result
+            if (cursor) {
+                document.getElementById("selectCategoria").innerHTML += `
+                    <option value="${cont++}">${cursor.value.nombreCategoria}</option>
+                `;
+                cursor.continue(); //SIGUIENTE CATEGORIA
             }
+        }
     }
 
+    //*****  FUNCION QUE LEE LOS DATOS DEL INDEXEDDB *****/
+    const readData = (n) =>{
+        const trans = db.transaction(['categorias'],'readonly');
+        const objectStore = trans.objectStore('categorias');
+
+        const request = objectStore.get(`Categoria ${n}`);
+
+        request.onsuccess = (e) => {
+            llenarGrild(e.target.result);
+        }
+    }
+//*****  FUNCION QUE LLENA LOS DATOS *****/
     const llenarGrild = (categoria) =>{
       aplicaciones = categoria.aplicaciones;
 
+      document.getElementById("gridContainer").innerHTML=""; // BORRADO DE LAS CATEGORIAS ANTERIORES
+
+      // RECORRE EL ARREGLO APLICACIONES Y CREA UNA CARD POR CADA ITEM DEL ARREGLO
       aplicaciones.forEach(element => {
+          document.getElementById("selectCategoria")
           document.getElementById("gridContainer").innerHTML += `
           <div class="cardContainer item1">
               <div class="card">
@@ -68,8 +95,12 @@ if(iDB){
           `;
           
       });
-
-
     }
 
+    //*******      CUANDO HAY UN CAMBIO EN SELECTCATEGORIAS ********/
+    document.getElementById("selectCategoria");
+    selectCategoria.onchange = () =>{
+        readData(selectCategoria.value);
+    }
 }
+
