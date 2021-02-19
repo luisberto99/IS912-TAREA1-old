@@ -86,16 +86,17 @@ if(iDB){
                   <div class="cardInfo">
                       <strong class="cardAppTitle">${element.nombre}</strong><br>
                       <span class="cardAppDev">${element.desarrollador}</span><br>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="far fa-star"></i>
+                      <div id="stars" class="stars">
+                        ${starts(element.calificacion)}
+                      </div>
                       <br>
                       <strong>${element.precio}</strong>
                   </div>
               </div>
           </div>
           `;
+
+          
           
       });
     }
@@ -106,18 +107,113 @@ if(iDB){
         readData(selectCategoria.value);
     }
 
+   function starts(n, id){
+        let r = "";
+        for (let i = 0; i < 5; i++) {
+            if (i < n) {
+                r += `<i class="fas fa-star"></i>`;
+            }
+            else{
+                r += `<i class="far fa-star"></i>`;
+            }
+        }
+        return r;
+   }
     //**********  OBTIENE EL DETALLE DE UNA APP DE LA CATEGORIA **********/
-    function modal1(n){
-        aplicaciones.forEach(element => {
-            if (element.codigo == n) {
+    function modal(n){
+        aplicaciones.forEach(elemento => {
+            if (elemento.codigo == n) {
                 modalBody = document.getElementById("modal-body");
-                modalBody.innerHTML=`Nuevo modal App${n} `;
+                modalBody.innerHTML=`
+                <div class="modalCarousel">
+                    <div id="carouselIndicators" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="${elemento.imagenes[0]}" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="${elemento.imagenes[1]}" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="${elemento.imagenes[2]}" class="d-block w-100" alt="...">
+                            </div>
+                            
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                        </a>
+                    </div>        
+                </div>
+                <div class="modalApp">
+                    <div class="img">
+                        <img src="img/app-icons/1.webp" alt="">
+                    </div>
+                    <div class="modalAppInfo">
+                        <strong class="modalAppTitle">${elemento.nombre}</strong><br>
+                        <span class="modalAppDev">${elemento.desarrollador}</span><br>
+                        <p class="modalAppDescription">
+                           ${elemento.descripcion}
+                        </p>
+                        <strong class="modalAppPrice">${elemento.precio}</strong><br>
+                    </div>
+                </div>
+                <div id="modalStars" class="modalStars">
+                    ${starts(elemento.calificacion)}
+                    <i>  ${elemento.calificacion}</i>
+                </div>
+                <div class="modalComments">
+                    <div class="modalUserComent">
+                        <div class="modalImgUserComent">
+                            <img src="img/user.webp" alt="">
+                        </div>
+                        <div class="modalcoment">
+                            <strong>${elemento.comentarios[0].usuario}</strong>
+                            <p>${elemento.comentarios[0].comentario}</p>
+                        </div>
+                    </div>
+
+                    <div class="modalUserComent">
+                        <div class="modalImgUserComent">
+                            <img src="img/user.webp" alt="">
+                        </div>
+                        <div class="modalcoment">
+                            <strong>${elemento.comentarios[1].usuario}</strong>
+                            <p>${elemento.comentarios[1].comentario}</p>
+                        </div>
+                    </div>
+
+                    <div class="modalUserComent">
+                        <div class="modalImgUserComent">
+                            <img src="img/user.webp" alt="">
+                        </div>
+                        <div class="modalcoment">
+                            <strong>${elemento.comentarios[2].usuario}</strong>
+                            <p>${elemento.comentarios[2].comentario}</p>
+                        </div>
+                    </div>
+
+                </div>
+                `;
+
+                if(elemento.calificacion < 3){
+                    document.getElementById("modalStars").classList.add("starsRed");
+                }
+
+                if(elemento.instalada){
+                    console.log(elemento.instalada)
+                    document.getElementById("btnInstall").hidden = true;
+                }else{
+                    document.getElementById("btnInstall").hidden = false;   
+                }
             }
         });
         
     }
-
-
     
 }
 

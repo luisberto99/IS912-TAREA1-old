@@ -136,6 +136,14 @@ align-self: start;
 }
 
 
+
+
+@media (min-width: 576px){
+  .modal-dialog {
+      max-width: 600px;
+  }
+}
+
 .modalCarousel{
   padding: 1rem;
 }
@@ -182,10 +190,45 @@ align-self: start;
   border-top: 1px solid #dee2e6;
   padding: 1rem;
   text-align: center;
-  color: forestgreen;
+  color: #228b22;
+}
+
+.starsRed{
+  color: #ff0000;
 }
 
 .modalComments{
   border-top: 1px solid #dee2e6;
   padding: 1rem;
+}
+
+.modalComments .modalUserComent:last-child{
+  border-bottom: 0;
+}
+.modalUserComent{
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid #dee2e6;
+  padding-top: 0.5rem;
+}
+
+.modalImgUserComent{
+  min-width: 20%;
+  display: flex;
+  align-items: center;
+}
+
+.modalImgUserComent img{
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+
+}
+
+.modalcoment p {
+  color: #6c757d;
+}
+
+.modal-footer .btn-primary{
+  background-color: #228b22
 }
