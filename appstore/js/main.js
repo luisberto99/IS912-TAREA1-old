@@ -90,7 +90,7 @@ if(iDB){
                         ${starts(element.calificacion)}
                       </div>
                       <br>
-                      <strong>${element.precio}</strong>
+                      <strong>${precio(element.precio)}</strong>
                   </div>
               </div>
           </div>
@@ -102,9 +102,17 @@ if(iDB){
     }
 
     //*******      CUANDO HAY UN CAMBIO EN SELECTCATEGORIAS ********/
-    document.getElementById("selectCategoria");
+    //document.getElementById("selectCategoria");
     selectCategoria.onchange = () =>{
         readData(selectCategoria.value);
+    }
+
+    function precio(p) {
+        if (p.substring(1) < 0.5) {
+            return 'FREE';
+        }else{
+            return p;
+        }
     }
 
    function starts(n, id){
@@ -124,7 +132,7 @@ if(iDB){
         aplicaciones.forEach(elemento => {
             if (elemento.codigo == n) {
                 modalBody = document.getElementById("modal-body");
-                modalBody.innerHTML=`
+                modalBody.innerHTML = `
                 <div class="modalCarousel">
                     <div id="carouselIndicators" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner">
@@ -151,7 +159,7 @@ if(iDB){
                 </div>
                 <div class="modalApp">
                     <div class="img">
-                        <img src="img/app-icons/1.webp" alt="">
+                        <img src="${elemento.icono}" alt="">
                     </div>
                     <div class="modalAppInfo">
                         <strong class="modalAppTitle">${elemento.nombre}</strong><br>
@@ -159,7 +167,7 @@ if(iDB){
                         <p class="modalAppDescription">
                            ${elemento.descripcion}
                         </p>
-                        <strong class="modalAppPrice">${elemento.precio}</strong><br>
+                        <strong class="modalAppPrice">${precio(elemento.precio)}</strong><br>
                     </div>
                 </div>
                 <div id="modalStars" class="modalStars">
@@ -205,16 +213,122 @@ if(iDB){
                 }
 
                 if(elemento.instalada){
-                    console.log(elemento.instalada)
                     document.getElementById("btnInstall").hidden = true;
                 }else{
                     document.getElementById("btnInstall").hidden = false;   
                 }
             }
         });
-        
     }
-    
+
+     //**********  AGREGA UNA NUEVA APLICACION ENLA CATEGORIA SELECCIONADA **********/
+     function agregarApp() {
+         var id = document.getElementById("idAppAdd");
+         var nombre = document.getElementById("txtNombre");
+         var dev = document.getElementById("txtDev");
+         var descripcion = document.getElementById("txtDescripcion");
+         var icon = document.getElementById("fileIcon");
+         var screenshots = document.getElementById("fileScreenshots");
+         var precio = document.getElementById("txtPrecio");
+
+         let aplicacion ;
+         const categoiraID = document.getElementById('selectCategoria').value;
+         
+        if(nombre.value != ""){
+            if(dev.value != ""){
+                if(descripcion.value != ""){
+                    if(icon.value != ""){
+                        if(screenshots.files.length >0){
+                            if(precio.value != ""){
+                                aplicacion = {
+                                    codigo: id.value,
+                                    nombre: nombre.value,
+                                    precio: `$${precio.value}`,
+                                    descripcion: descripcion.value,
+                                    icono: `img/app-icons/${icon.files[0].name}`,
+                                    instalada: false,
+                                    app: "app/demo.apk",
+                                    calificacion: 5,
+                                    descargas: 0,
+                                    desarrollador: dev.value,
+                                    imagenes:["img/app-screenshots/1.webp","img/app-screenshots/2.webp","img/app-screenshots/3.webp"],
+                                    comentarios:[
+                                        { comentario: "Quaerat quod qui molestiae sequi, sint aliquam omnis quos voluptas?" ,calificacion:Math.floor(Math.random() * (5 - 1)) + 1,fecha:"12/12/2012",usuario:"Juan"},
+                                        {comentario: "Quaerat quod qui molestiae sequi, sint aliquam omnis quos voluptas?",calificacion:Math.floor(Math.random() * (5 - 1)) + 1,fecha:"12/12/2012",usuario:"Pedro"},
+                                        {comentario: "Quaerat quod qui molestiae sequi, sint aliquam omnis quos voluptas?",calificacion:Math.floor(Math.random() * (5 - 1)) + 1,fecha:"12/12/2012",usuario:"Maria"},
+                                    ],
+
+                                };
+
+                                console.log(aplicacion);
+
+                                const trans = db.transaction(['categorias'],'readwrite');
+                                const objectStore = trans.objectStore('categorias');  
+                                const request = objectStore.get(`Categoria ${categoiraID}`);
+
+                                request.onsuccess = (e) =>{
+
+                                    categoria = e.target.result;
+                                    categoria.aplicaciones.push(aplicacion);
+
+                                    const request1 = objectStore.put(categoria);
+
+                                    request1.onsuccess = (e) =>{
+                                        alert("Se ha guardado", e.target.result);
+                                        readData(categoiraID);
+                                        $("#btnCerrarAgregarApp").click();
+                                        document.getElementById("formAgregar").reset();
+                                    }
+
+                                    request1.onerror =(e) =>{
+                                        console.log(e)
+                                        alert("error",e.target.error);
+                                    }
+                                }
+
+                                request.onerror =(e) =>{
+                                    alert(e.result);
+                                }
+
+                                //var request = objectStore.add()
+                            }
+                        }
+                    }
+                }
+            }  
+        }
+
+
+            
+       
+         
+     }
+
+     function getLastCodigo() {
+        var max = 0;
+        const trans = db.transaction(['categorias'],);
+        const objectStore = trans.objectStore('categorias');  
+        for (let i = 0; i < 5; i++) {
+            const request = objectStore.get(`Categoria ${i}`);
+            request.onsuccess = (e) => {
+                let categoria = e.target.result;
+                let aplicacion = categoria.aplicaciones;
+                aplicacion.forEach(app => {
+                    if (app.codigo > max) {
+                        max = app.codigo;
+                    }
+                });     
+                if (i === 4) {
+                    document.getElementById("idAppAdd").value = ++max;
+                }
+            }
+        }
+     }
+
+     function btnAgregar(){
+        document.getElementById("lblCategoriaID").innerHTML = `Categoria ${selectCategoria.value}`;
+        getLastCodigo()
+     }
 }
 
 

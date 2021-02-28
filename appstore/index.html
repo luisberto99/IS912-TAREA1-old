@@ -34,10 +34,13 @@
     </nav>
 
     <main role="main" class="container">
-
-        <select id="selectCategoria" class="form-select" aria-label="Default select example">
-            <!-- <option value="0">Categoria 1</option> -->
-        </select>
+        <div class="categorias">
+          <select id="selectCategoria" class="form-select" aria-label="Default select example">
+              <!-- <option value="0">Categoria 1</option> -->
+          </select>
+          <button class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarApp" onclick="btnAgregar()">Agregar</button>
+          <button  class="btn btn-danger" data-toggle="modal" data-target="#modalEliminarApp">Eliminar</button>
+        </div>
 
         <div class="starter-template container">
             <div id="gridContainer" class="gridContainer">
@@ -65,7 +68,7 @@
 
     </main><!-- /.container -->
 
-    <!-- VENTANA MODAL -->
+    <!-- VENTANA MODAL APLICACION -->
     <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -155,14 +158,84 @@
               </div> -->
 
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <button type="button" id="btnInstall" class="btn btn-primary" onclick="btnInstall()">Installar</button>
-            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" id="btnInstall" class="btn btn-primary" onclick="btnInstall()">Installar</button>
           </div>
         </div>
       </div>
+    </div>
 
+     <!-- VENTANA MODAL AGREGAR APLICACION -->
+    <div class="modal fade" id="modalAgregarApp" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Agregar App</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="formAgregar" class="needs-validation" novalidate>
+                <label id="lblCategoriaID" >Categoria 0</label>
+                <div id=lblID class="form-group">
+                  <label >Id Aplicacion </label>
+                  <input type="number" name="" id="idAppAdd" disabled>
+                </div>
+                
+                <input type="text" class="form-control" name="txtNombre" id="txtNombre" placeholder="Nombre de la Aplicacion" required>
+                <input type="text" class="form-control" name="txtDev" id="txtDev" placeholder="Desarrador" required>
+                <textarea rows="3" class="form-control" name="txtDescripcion" id="txtDescripcion" placeholder="Descripcion" required></textarea>
+                <label >Icono: 
+                  <input type="file" accept="image/*" name="file" id="fileIcon" required>
+                </label>
+                <label >Screenshots: 
+                  <input type="file" accept="image/*" name="fileScreenshots" id="fileScreenshots" multiple required>
+                </label>
+
+
+                <input type="number" class="form-control" name="txtPrecio" id="txtPrecio" placeholder="Precio" >
+
+
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="btnCerrarAgregarApp" class="btn btn-secondary" data-dismiss="modal">Salir</button>
+            <button type="button" class="btn btn-primary" onclick="agregarApp()">Agregar App</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <!-- VENTANA MODAL ELIMINAR APLICACION -->
+    <div class="modal fade" id="modalEliminarApp" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar App</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-body">
+              <form action="#">
+                  <input type="text" name="idApp" id="idApp" placeholder="ID Aplicacion">
+                  <input type="button" value="Buscar">
+              </form>
+              <div class="infoApp">
+
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-danger" disabled>Elimianar App</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <script src="js/jquery-3.4.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
